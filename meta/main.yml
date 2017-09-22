@@ -1,0 +1,23 @@
+galaxy_info:
+  author: Panuccio Maurizio
+  description: This role install automysqlbackup from the latest version
+  company: Uccio.org
+
+
+  license: GPLv2
+
+  min_ansible_version: 1.4
+
+  github_branch: master
+
+  platforms:
+   - name: Ubuntu
+     versions:
+     - LTS 12.04
+     - LTS 16.04
+
+  galaxy_tags: 
+    - automysqlbackup
+    - backup
+    - mysql	
+

@@ -1,0 +1,31 @@
+---
+# tasks file for Uccio.automysqlbackup
+    - name: Download automysqlbackup
+      get_url: url={{automysqlbackup_source}}
+           dest=/tmp/automysqlbackup.tar.gz 
+           mode=0440
+
+    - name: Assures tmp/automysqlbackup dir exists
+      file: path=/tmp/automysqlbackup state=directory
+
+    - name: Extract automysqlbackup
+      unarchive: src=/tmp/automysqlbackup.tar.gz
+             dest=/tmp/automysqlbackup
+             copy=no
+
+    - name: Move automysqlbackup to final destination
+      shell: mv /tmp/automysqlbackup/automysqlbackup /usr/local/bin/automysqlbackup
+
+    - name: Set automysqlbackup privilegies
+      file: path=/usr/local/bin/automysqlbackup owner=root group=root mode=0755
+
+    - name: Assures etc/automysqlbackup dir exists
+      file: path=/etc/automysqlbackup state=directory
+
+    - name: Setup config
+      template:
+        src: 'automysqlbackup.conf'
+        dest: '/etc/automysqlbackup/automysqlbackup.conf'
+        owner: root
+        group: root
+        mode: '0400'
