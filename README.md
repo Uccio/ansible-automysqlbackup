@@ -24,8 +24,6 @@ None
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
    - hosts: mysql-servers
      become: yes
      vars_files:
@@ -41,4 +39,4 @@ GPL v3
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+This role was created in 2017 by [Uccio](http://uccio.org).
