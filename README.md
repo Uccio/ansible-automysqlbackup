@@ -1,4 +1,4 @@
-Role Name
+Role Description
 =========
 
 This role installs AutoMysqlBackup on a debian system.
