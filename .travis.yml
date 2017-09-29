@@ -15,6 +15,7 @@ branches:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y curl
+  - sudo apt-get purge mysql-server mysql-common mysql-client -y
 
 install:
   # Install Ansible.
