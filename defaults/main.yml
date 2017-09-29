@@ -2,9 +2,14 @@
 # defaults file for Uccio.automysqlbackup
 #automysqlbackup_source:  https://sourceforge.net/projects/automysqlbackup/files/latest/download
 automysqlbackup_source: https://github.com/sixhop/AutoMySQLBackup/archive/master.zip
+automysqlbackup_tmp_file: '/tmp/automysqlbackup/AutoMySQLBackup-master/automysqlbackup'
+
 
 automysqlbackup_mysql_dump_username: ''
 automysqlbackup_mysql_dump_password: ''
+automysqlbackup_mysql_dump_login_path: 'automysqlbackup'
+
+
 automysqlbackup_mysql_dump_host: 'localhost'
 automysqlbackup_mysql_dump_host_friendly: 'localhost'
 automysqlbackup_backup_dir: '/var/backups/db'

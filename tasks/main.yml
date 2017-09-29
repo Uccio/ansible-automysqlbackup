@@ -1,9 +1,14 @@
 ---
 # tasks file for Uccio.automysqlbackup
+    - include_tasks: setup-Debian.yml
+      when: ansible_os_family == 'Debian'
+      static: no
+
     - name: Download automysqlbackup
       get_url: url={{automysqlbackup_source}}
            dest=/tmp/automysqlbackup.tar.gz 
            mode=0440
+      changed_when: False
 
     - name: Assures tmp/automysqlbackup dir exists
       file: path=/tmp/automysqlbackup state=directory
@@ -12,9 +17,11 @@
       unarchive: src=/tmp/automysqlbackup.tar.gz
              dest=/tmp/automysqlbackup
              copy=no
+      changed_when: False
 
     - name: Move automysqlbackup to final destination
-      shell: mv /tmp/automysqlbackup/automysqlbackup /usr/local/bin/automysqlbackup
+      shell: mv {{automysqlbackup_tmp_file}} /usr/local/bin/automysqlbackup
+      changed_when: False
 
     - name: Set automysqlbackup privilegies
       file: path=/usr/local/bin/automysqlbackup owner=root group=root mode=0755
@@ -29,3 +36,13 @@
         owner: root
         group: root
         mode: '0400'
+
+    - name: Get MySQL version.
+      command: 'mysql --version'
+      register: mysql_cli_version
+      changed_when: false
+
+    - name: Setup credential for Mysql > 5.6
+      shell: echo "{{automysqlbackup_mysql_dump_password}}" >  mysql_config_editor set --login-path={{automysqlbackup_mysql_dump_login_path}} --host={{automysqlbackup_mysql_dump_host}} --user={{automysqlbackup_mysql_dump_username}} --warn=FALSE --password
+      changed_when: False
+      when: ('5.6.' in mysql_cli_version.stdout) or ('5.7.' in mysql_cli_version.stdout)
