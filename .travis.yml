@@ -1,56 +1,27 @@
 ---
-sudo: required
-dist: xenial
-
-language: python
-python: "2.7"
+services:
+ - docker
 
 env:
-  - SITE=test.yml ANSIBLE_VERSION=2.4.0.0
+ - distro: ubuntu1604
 
 branches:
   only:
     - travis-ci
 
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y curl
-  - sudo apt-get purge mysql-server mysql-common mysql-client -y
-
-install:
-  # Install Ansible.
-  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install --no-binary ansible ansible; else pip install --no-binary ansible ansible==$ANSIBLE_VERSION; fi
-
-  # Add ansible.cfg to pick up roles path.
-  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
-
-  # Install ansible-lint
-  - pip install ansible-lint
 
 script:
-  # Check the role/playbook's syntax.
-  - "ansible-playbook -i tests/inventory tests/$SITE --syntax-check"
+  # Configure test script so we can run extra tests after playbook is run.
+  - export container_id=$(date +%s)
+  - export cleanup=false
 
-  # Run the role/playbook with ansible-playbook.
-  - "ansible-playbook -i tests/inventory tests/$SITE --connection=local -b"
+  # Download test shim.
+  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
+  - chmod +x ${PWD}/tests/test.sh
 
-  # Run the role/playbook again, checking to make sure it's idempotent.
-  - >
-    ansible-playbook -i tests/inventory tests/$SITE --connection=local -b
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
+  # Run tests.
+  - ${PWD}/tests/test.sh
 
-  # ansible-lint checks for best practice
-  - ansible-lint tests/$SITE
+  # Ensure Java is installed.
+  - 'docker exec --tty ${container_id} env TERM=xterm which automysqlbackup'
 
-  # Check if automysqlbackup is installed
-  - >
-    test -e /usr/local/bin/automysqlbackup
-    && (echo 'automysqlbackup is installed: pass' && exit 0)
-    || (echo 'automysqlbackup is installed: fail' && exit 1)
-
-after_failure:
-  - sudo crontab -l
-  - sudo ansible --version
-  - ansible -i 127.0.0.1, -m setup all -c local
