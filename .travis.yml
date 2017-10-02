@@ -4,6 +4,8 @@ services:
 
 env:
  - distro: ubuntu1604
+ - distro: ubuntu1404
+
 
 branches:
   only:
