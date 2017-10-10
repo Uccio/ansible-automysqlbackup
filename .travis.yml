@@ -4,7 +4,7 @@ services:
 
 env:
  - distro: ubuntu1404
-
+ - distro: ubuntu1604 
 
 branches:
   only:
