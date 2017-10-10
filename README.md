@@ -1,5 +1,6 @@
-Role Description
+AutoMySqlBackup
 =========
+[![Build Status](https://travis-ci.org/Uccio/ansible-automysqlbackup.svg?branch=master)](https://travis-ci.org/Uccio/ansible-automysqlbackup.svg?branch=master)
 
 This role installs AutoMysqlBackup on a debian system.
 
