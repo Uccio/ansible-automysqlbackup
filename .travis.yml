@@ -3,7 +3,6 @@ services:
  - docker
 
 env:
- - distro: ubuntu1604
  - distro: ubuntu1404
 
 
