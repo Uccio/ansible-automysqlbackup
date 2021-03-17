@@ -1,26 +1,29 @@
 ---
 # defaults file for Uccio.automysqlbackup
-#automysqlbackup_source:  https://sourceforge.net/projects/automysqlbackup/files/latest/download
+#automysqlbackup_source: https://sourceforge.net/projects/automysqlbackup/files/latest/download
 automysqlbackup_source: https://github.com/sixhop/AutoMySQLBackup/archive/master.zip
 automysqlbackup_tmp_file: '/tmp/automysqlbackup/AutoMySQLBackup-master/automysqlbackup'
 
 
-automysqlbackup_mysql_dump_username: ''
+automysqlbackup_mysql_dump_username: 'root'
 automysqlbackup_mysql_dump_password: ''
-automysqlbackup_mysql_dump_login_path: 'automysqlbackup'
+automysqlbackup_mysql_dump_login_path: 'automysqldump'
+automysqlbackup_mysql_dump_login_path_file: ''
+automysqlbackup_mysql_dump_encrypted_login: 'no'
 
 
 automysqlbackup_mysql_dump_host: 'localhost'
-automysqlbackup_mysql_dump_host_friendly: 'localhost'
+automysqlbackup_mysql_dump_host_friendly: ''
 automysqlbackup_backup_dir: '/var/backups/db'
-automysqlbackup_multicore: 'no'
+automysqlbackup_multicore: 'yes'
 automysqlbackup_multicore_threads: 2
 automysqlbackup_db_names: ''
 automysqlbackup_db_month_names: ''
-automysqlbackup_db_exclude: "'information_schema' 'mysql' 'performance_schema' 'test' 'sys'"
+automysqlbackup_db_exclude: "'performance_schema' 'information_schema'"
+automysqlbackup_db_exclude_pattern: ''
 automysqlbackup_table_exclude: ''
-automysqlbackup_do_monthly: "01"
-automysqlbackup_do_weekly: 5
+automysqlbackup_do_monthly: '01'
+automysqlbackup_do_weekly: '5'
 automysqlbackup_rotation_daily: 6
 automysqlbackup_rotation_weekly: 35
 automysqlbackup_rotation_monthly: 150
@@ -30,9 +33,11 @@ automysqlbackup_mysql_dump_usessl: 'no'
 automysqlbackup_mysql_dump_socket: ''
 automysqlbackup_mysql_dump_max_allowed_packet: ''
 automysqlbackup_mysql_dump_single_transaction: 'no'
-automysqlbackup_mysql_dump_full_schema: 'no'
-automysqlbackup_mysql_dump_dbstatus: 'no'
-automysqlbackup_mysql_dump_create_database: 'yes'
+automysqlbackup_mysql_dump_master_data: ~
+automysqlbackup_mysql_dump_full_schema: 'yes'
+automysqlbackup_mysql_dump_dbstatus: 'yes'
+automysqlbackup_mysql_dump_create_database: 'no'
+automysqlbackup_mysql_dump_add_drop_database: 'no'
 automysqlbackup_mysql_dump_use_separate_dirs: 'yes'
 automysqlbackup_mysql_dump_compression: 'gzip'
 automysqlbackup_mysql_dump_latest: 'no'
@@ -45,6 +50,5 @@ automysqlbackup_mail_use_uuencoded_attachments: 'no'
 automysqlbackup_mail_address: 'root'
 automysqlbackup_encrypt: 'no'
 automysqlbackup_encrypt_password: 'password0123'
-automysqlbackup_backup_local_files:  ''
-automysqlbackup_prebackup: ''
+automysqlbackup_backup_local_files: ''
 automysqlbackup_dryrun: 0
