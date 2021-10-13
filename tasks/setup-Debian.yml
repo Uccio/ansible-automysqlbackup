@@ -1,7 +1,7 @@
 ---
-  - name: install  packages
-    apt: name={{ item }} update_cache=yes cache_valid_time=3600 state=latest
-    with_items:
-      - zip
-      - mysql-common
-      - mysql-client
+  - name: ensure mysql-client is installed
+    apt:
+      name: "{{ automysqlbackup_client_packages }}"
+      state: present
+      update_cache: true
+    become: true

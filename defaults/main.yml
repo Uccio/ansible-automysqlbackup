@@ -52,3 +52,9 @@ automysqlbackup_encrypt: 'no'
 automysqlbackup_encrypt_password: 'password0123'
 automysqlbackup_backup_local_files: ''
 automysqlbackup_dryrun: 0
+
+automysqlbackup_client_packages: 
+  - mysql-client
+  - mysql-common
+  - zip
+

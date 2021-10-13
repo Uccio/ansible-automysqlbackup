@@ -2,8 +2,7 @@
 # tasks file for Uccio.automysqlbackup
     - include_tasks: setup-Debian.yml
       when: ansible_os_family == 'Debian'
-      static: no
-
+  
     - name: Download automysqlbackup
       get_url: url={{automysqlbackup_source}}
            dest=/tmp/automysqlbackup.tar.gz 
