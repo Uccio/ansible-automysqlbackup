@@ -2,31 +2,43 @@
 # tasks file for Uccio.automysqlbackup
     - include_tasks: setup-Debian.yml
       when: ansible_os_family == 'Debian'
-  
+
     - name: Download automysqlbackup
-      get_url: url={{automysqlbackup_source}}
-           dest=/tmp/automysqlbackup.tar.gz 
-           mode=0440
-      changed_when: False
+      get_url:
+        url: "{{ automysqlbackup_source }}"
+        dest: /tmp/automysqlbackup.tar.gz
+        mode: '0440'
+      changed_when: false
 
     - name: Assures tmp/automysqlbackup dir exists
-      file: path=/tmp/automysqlbackup state=directory
+      file:
+        path: /tmp/automysqlbackup
+        state: directory
 
     - name: Extract automysqlbackup
-      unarchive: src=/tmp/automysqlbackup.tar.gz
-             dest=/tmp/automysqlbackup
-             copy=no
-      changed_when: False
+      unarchive:
+        src: /tmp/automysqlbackup.tar.gz
+        dest: /tmp/automysqlbackup
+        remote_src: yes
+      changed_when: false
 
     - name: Move automysqlbackup to final destination
-      shell: mv {{automysqlbackup_tmp_file}} /usr/local/bin/automysqlbackup
-      changed_when: False
+      command: "mv {{ automysqlbackup_tmp_file }} /usr/local/bin/automysqlbackup"
+      args:
+        creates: /usr/local/bin/automysqlbackup
+      changed_when: false
 
     - name: Set automysqlbackup privilegies
-      file: path=/usr/local/bin/automysqlbackup owner=root group=root mode=0755
+      file:
+        path: /usr/local/bin/automysqlbackup
+        owner: root
+        group: root
+        mode: '0755'
 
     - name: Assures etc/automysqlbackup dir exists
-      file: path=/etc/automysqlbackup state=directory
+      file:
+        path: /etc/automysqlbackup
+        state: directory
 
     - name: Setup config
       template:
@@ -42,6 +54,23 @@
       changed_when: false
 
     - name: Setup credential for Mysql > 5.6
-      shell: echo "{{automysqlbackup_mysql_dump_password}}" >  mysql_config_editor set --login-path={{automysqlbackup_mysql_dump_login_path}} --host={{automysqlbackup_mysql_dump_host}} --user={{automysqlbackup_mysql_dump_username}} --warn=FALSE --password
-      changed_when: False
-      when: ('5.6.' in mysql_cli_version.stdout) or ('5.7.' in mysql_cli_version.stdout)
+      shell:
+        cmd: "mysql_config_editor set --login-path={{ automysqlbackup_mysql_dump_login_path }} --host={{ automysqlbackup_mysql_dump_host }} --user={{ automysqlbackup_mysql_dump_username }} --warn=FALSE --password"
+        stdin: "{{ automysqlbackup_mysql_dump_password }}"
+      no_log: true
+      changed_when: false
+      when:
+        - automysqlbackup_mysql_dump_encrypted_login == 'yes'
+        - automysqlbackup_mysql_dump_password | length > 0
+        - "'MariaDB' not in mysql_cli_version.stdout"
+        - >
+          ('5.6.' in mysql_cli_version.stdout) or
+          ('5.7.' in mysql_cli_version.stdout) or
+          ('8.0.' in mysql_cli_version.stdout) or
+          ('Ver 8' in mysql_cli_version.stdout) or
+          ('Distrib 8' in mysql_cli_version.stdout)
+
+
+
+
+

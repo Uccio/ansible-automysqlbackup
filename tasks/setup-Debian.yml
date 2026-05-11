@@ -1,7 +1,9 @@
 ---
-  - name: ensure mysql-client is installed
+  - name: Install required packages
     apt:
-      name: "{{ automysqlbackup_client_packages }}"
+      name:
+        - zip
+        - "{{ automysqlbackup_client_package }}"
+      update_cache: yes
+      cache_valid_time: 3600
       state: present
-      update_cache: true
-    become: true

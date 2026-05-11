@@ -6,20 +6,25 @@ galaxy_info:
 
   license: GPLv2
 
-  min_ansible_version: 2.9
+  min_ansible_version: 2.4
 
   github_branch: master
 
   platforms:
    - name: Ubuntu
      versions:
-       - xenial
-       - bionic
-       - focal
+     - focal
+     - jammy
+     - noble
+   - name: Debian
+     versions:
+     - buster
+     - bullseye
+     - bookworm
 
 
   galaxy_tags: 
     - automysqlbackup
     - backup
     - mysql
-    - mariadb 
+    - maridb
