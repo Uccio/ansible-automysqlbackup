@@ -4,6 +4,7 @@
 automysqlbackup_source: https://github.com/sixhop/AutoMySQLBackup/archive/master.zip
 automysqlbackup_tmp_file: '/tmp/automysqlbackup/AutoMySQLBackup-master/automysqlbackup'
 
+automysqlbackup_client_package: 'mysql-client'
 
 automysqlbackup_mysql_dump_username: 'root'
 automysqlbackup_mysql_dump_password: ''

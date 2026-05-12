@@ -1,9 +1,28 @@
 ---
-  - name: Install required packages
-    apt:
-      name:
-        - zip
-        - "{{ automysqlbackup_client_package }}"
-      update_cache: yes
-      cache_valid_time: 3600
-      state: present
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  register: apt_update_result
+  until: apt_update_result is success
+  retries: 3
+  delay: 5
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    NEEDRESTART_MODE: a
+
+- name: Install required packages
+  apt:
+    name:
+      - zip
+      - unzip
+      - pigz
+      - "{{ automysqlbackup_client_package }}"
+    state: present
+  register: apt_install_result
+  until: apt_install_result is success
+  retries: 3
+  delay: 5
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    NEEDRESTART_MODE: a

@@ -2,6 +2,8 @@ galaxy_info:
   author: Panuccio Maurizio
   description: This role install automysqlbackup from the latest version
   company: Uccio.org
+  namespace: Uccio
+  role_name: automysqlbackup
 
 
   license: GPLv2
@@ -16,6 +18,7 @@ galaxy_info:
      - focal
      - jammy
      - noble
+     - resolute
    - name: Debian
      versions:
      - buster

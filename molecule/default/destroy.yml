@@ -1,0 +1,16 @@
+---
+- name: Destroy
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Destroy docker container
+      community.docker.docker_container:
+        name: "{{ item.name }}"
+        state: absent
+        force_kill: true
+      loop: "{{ molecule_yml.platforms }}"
+
+    - name: Remove molecule instance config
+      ansible.builtin.file:
+        path: "{{ molecule_instance_config }}"
+        state: absent

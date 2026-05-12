@@ -1,0 +1,82 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+prerun: false
+platforms:
+  - name: ubuntu2404-mariadb
+    image: "geerlingguy/docker-ubuntu2404-ansible:latest"
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+    groups:
+      - mariadb
+  - name: ubuntu2404-mysql
+    image: "geerlingguy/docker-ubuntu2404-ansible:latest"
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+    groups:
+      - mysql
+  - name: ubuntu2204-mariadb
+    image: "geerlingguy/docker-ubuntu2204-ansible:latest"
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+    groups:
+      - mariadb
+  - name: ubuntu2204-mysql
+    image: "geerlingguy/docker-ubuntu2204-ansible:latest"
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+    groups:
+      - mysql
+  - name: ubuntu2604-mariadb
+    image: "geerlingguy/docker-ubuntu2604-ansible:latest"
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+    groups:
+      - mariadb
+  - name: ubuntu2604-mysql
+    image: "geerlingguy/docker-ubuntu2604-ansible:latest"
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+    groups:
+      - mysql
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      interpreter_python: auto_silent
+      callbacks_enabled: profile_tasks, timer
+      roles_path: ../../../
+  inventory:
+    group_vars:
+      mariadb:
+        automysqlbackup_client_package: mariadb-client
+      mysql:
+        automysqlbackup_client_package: mysql-client
+verifier:
+  name: ansible

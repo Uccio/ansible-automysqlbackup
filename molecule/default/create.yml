@@ -1,0 +1,46 @@
+---
+- name: Create
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Create docker container
+      community.docker.docker_container:
+        name: "{{ item.name }}"
+        image: "{{ item.image }}"
+        state: started
+        command: "{{ item.command | default(omit) }}"
+        privileged: "{{ item.privileged | default(omit) }}"
+        volumes: "{{ item.volumes | default(omit) }}"
+        cgroupns_mode: "{{ item.cgroupns_mode | default(omit) }}"
+        published_ports: "{{ item.published_ports | default(omit) }}"
+        env: "{{ item.env | default(omit) }}"
+      loop: "{{ molecule_yml.platforms }}"
+      register: server
+
+    - name: Populate instance config dict
+      ansible.builtin.set_fact:
+        instance_conf_dict:
+          instance: "{{ item.item.name }}"
+          address: "{{ item.item.name }}"
+          user: "{{ item.item.user | default('root') }}"
+          port: "{{ item.item.port | default(22) }}"
+          identity_file: "{{ item.item.identity_file | default(omit) }}"
+          connection: docker
+      loop: "{{ server.results }}"
+      register: instance_config_dict
+      when: server.changed
+
+    - name: Convert instance config dict to a list
+      ansible.builtin.set_fact:
+        instance_conf: "{{ instance_config_dict.results | map(attribute='ansible_facts.instance_conf_dict') | list }}"
+      when: server.changed
+
+    - name: Dump instance config
+      ansible.builtin.copy:
+        content: |
+          # Molecule managed
+
+          {{ instance_conf | to_json | from_json | to_yaml }}
+        dest: "{{ molecule_instance_config }}"
+        mode: "0600"
+      when: server.changed
